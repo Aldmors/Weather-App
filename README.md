@@ -20,3 +20,21 @@ A web application built with Django and Next.js to display and save weather hist
 - Weather data will be fetched from an external service (e.g., OpenWeatherMap).
 - Data will be stored in a database.
 - The entire application will be based on Docker Compose for easy setup and local installation with a single command.
+
+
+```
+docker-compose up
+```
+
+
+.env
+```.env
+# PostgreSQL Database Configuration
+POSTGRES_DB=weather_app_db
+POSTGRES_USER=weather_app_user
+POSTGRES_PASSWORD=your_strong_password_here
+
+# Django Configuration
+SECRET_KEY=your_django_secret_key_here
+DEBUG=1
+```
