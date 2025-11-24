@@ -35,6 +35,6 @@ POSTGRES_USER=weather_app_user
 POSTGRES_PASSWORD=your_strong_password_here
 
 # Django Configuration
-SECRET_KEY=your_django_secret_key_here
+DJANGO_SECRET_KEY=your_django_secret_key_here
 DEBUG=1
 ```
