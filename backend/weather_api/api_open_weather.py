@@ -2,6 +2,7 @@ import os
 import requests
 from django.http import HttpResponse
 import dotenv
+from datetime import datetime
 
 
 dotenv.load_dotenv()
@@ -9,8 +10,10 @@ dotenv.load_dotenv()
 
 class WeatherAPI:
     def __init__(self):
-        self.api_key =  os.getenv('WEATHER_KEY')
+        self._api_key =  os.getenv('WEATHER_KEY')
+        self._api_onecall_key = os.getenv('WEATHER_KEY_ONE_CALL')
         self.base_url = "https://api.openweathermap.org/data/3.0/onecall"
+        self.base_url_2_5 = "https://api.openweathermap.org/data/2.5/weather"
 
     def get_weather(self, lat, lon, units="metric"):
         """
@@ -19,18 +22,11 @@ class WeatherAPI:
         params = {
             "lat": lat,
             "lon": lon,
-            "appid": self.api_key,
+            "appid": self._api_onecall_key,
             "units": units,
         }
         response = requests.get(self.base_url, params=params)
         return response.json()
-
-    def get_current_weather(self, lat, lon, units="metric"):
-        """
-        Get the current weather data.
-        """
-        weather_data = self.get_weather(lat, lon, units)
-        return weather_data.get("current")
 
     def get_forecast_weather(self, lat, lon, units="metric"):
         """
@@ -42,19 +38,68 @@ class WeatherAPI:
             "daily": weather_data.get("daily"),
         }
 
-    def get_weather_overview(self, lat, lon, units="metric"):
+
+
+    def get_weather_overview_one_call(self, lat, lon, weather_date=None, units="metric"):
         """
-        Get a brief overview of the weather.
+        Get weather overview from One Call API 3.0 overview endpoint.
         """
-        current_weather = self.get_current_weather(lat, lon, units)
-        if not current_weather:
-            return None
-        
-        overview = {
-            "timestamp": current_weather.get("dt"),
-            "temp": current_weather.get("temp"),
-            "feels_like": current_weather.get("feels_like"),
-            "weather": current_weather.get("weather")[0].get("main") if current_weather.get("weather") else None,
-            "weather_description": current_weather.get("weather")[0].get("description") if current_weather.get("weather") else None,
+        weather_date = weather_date.strftime("%Y-%m-%d") if weather_date else None
+
+        overview_url = f"{self.base_url}/overview"
+        params = {
+            "lat": lat,
+            "lon": lon,
+            "appid": self._api_onecall_key,
+            "date": weather_date,
+            "units": units,
         }
-        return overview
+        response = requests.get(overview_url, params=params)
+        return response.json()
+
+    def get_day_summary(self, lat, lon, date, units="metric"):
+        """
+        Get weather data for a given latitude and longitude.
+        """
+        params = {
+            "lat": lat,
+            "lon": lon,
+            "date": date,
+            "appid": self._api_onecall_key,
+            "units": units,
+        }
+        response = requests.get(f"{self.base_url}/day_summary", params=params)
+        return response.json()
+
+
+    def get_current_weather_by_coords_2_5(self, lat, lon, units="metric"):
+        """
+        Get current weather data for a given latitude and longitude from API 2.5.
+        """
+        params = {
+            "lat": lat,
+            "lon": lon,
+            "appid": self._api_key,
+            "units": units,
+        }
+        response = requests.get(self.base_url_2_5, params=params)
+        return response.json()
+
+    def get_current_weather_by_city_name_2_5(self, city_name, units="metric"):
+        """
+        Get current weather data for a given city name from API 2.5.
+        """
+        params = {
+            "q": city_name,
+            "appid": self._api_key,
+            "units": units,
+        }
+        response = requests.get(self.base_url_2_5, params=params)
+        return response.json()
+
+
+#
+# api = WeatherAPI()
+# print(api.get_weather("50.0619474", "19.9368564"))
+#
+# print(api.get_current_weather_by_city_name_2_5("Kraków"))

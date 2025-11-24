@@ -7,7 +7,8 @@ dotenv.load_dotenv()
 
 class GeoCodesAPI:
     def __init__(self):
-        self.api_key = os.getenv('WEATHER_GEO_KEY')
+        self._api_key = os.getenv('WEATHER_KEY')
+
         self.base_url = "http://api.openweathermap.org/geo/1.0/"
 
     def get_coords_by_location(self, city_name, state_code="", country_code="", limit=1):
@@ -18,7 +19,7 @@ class GeoCodesAPI:
         params = {
             "q": q_param,
             "limit": limit,
-            "appid": self.api_key,
+            "appid": self._api_key,
         }
         response = requests.get(f"{self.base_url}direct", params=params)
         return response.json()
@@ -30,7 +31,10 @@ class GeoCodesAPI:
         zip_param = f"{zip_code},{country_code}"
         params = {
             "zip": zip_param,
-            "appid": self.api_key,
+            "appid": self._api_key,
         }
         response = requests.get(f"{self.base_url}zip", params=params)
         return response.json()
+
+api = GeoCodesAPI()
+print(api.get_coords_by_location("Kraków"))
