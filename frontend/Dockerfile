@@ -1,13 +1,19 @@
 # Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+FROM node:24-alpine
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY front_weather_app/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
 COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
