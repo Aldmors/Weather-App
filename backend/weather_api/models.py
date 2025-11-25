@@ -1,6 +1,9 @@
 from django.db import models
 
-from backend.frontend_api.models import User
+class User(models.Model):
+    username = models.CharField(max_length=50)
+    email = models.EmailField()
+    password = models.CharField(max_length=128)
 
 
 class FavoriteLocations(models.Model):
