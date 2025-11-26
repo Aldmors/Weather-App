@@ -1,6 +1,6 @@
-
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import permissions
-from .serializers import FavoriteLocationsSerializer, UserSerializer
+from .serializers import FavoriteLocationsSerializer
 from .models import FavoriteLocations
 from rest_framework.views import APIView
 from django.http import Http404
@@ -23,6 +23,7 @@ class FavoriteLocationsView(APIView):
         serializer = FavoriteLocationsSerializer(favorite_locations, many=True)
         return Response(serializer.data)
 
+    @swagger_auto_schema(request_body=FavoriteLocationsSerializer)
     def post(self, request, format=None):
         serializer = FavoriteLocationsSerializer(data=request.data)
         if serializer.is_valid():
@@ -36,27 +37,29 @@ class FavoriteLocationsView(APIView):
 
 class FavoriteLocationsDetail(APIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
-    def get_object(self, pk):
+    def get_object(self, request):
+        pk = request.data.get('pk')
         try:
             return FavoriteLocations.objects.get(pk=pk)
         except FavoriteLocations.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        snippet = self.get_object(pk)
+    def get(self, request):
+        snippet = self.get_object(request)
         serializer = FavoriteLocationsSerializer(snippet)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        snippet = self.get_object(pk)
+    @swagger_auto_schema(request_body=FavoriteLocationsSerializer)
+    def put(self, request, format=None):
+        snippet = self.get_object(request)
         serializer = FavoriteLocationsSerializer(snippet, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
-        snippet = self.get_object(pk)
+    def delete(self, request, format=None):
+        snippet = self.get_object(request)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

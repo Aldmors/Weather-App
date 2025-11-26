@@ -3,10 +3,11 @@ from .models import FavoriteLocations
 from django.contrib.auth.models import User
 
 class FavoriteLocationsSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source="owner.username")
+
     class Meta:
         model = FavoriteLocations
-        fields = ('id', 'location_name', 'lat', 'lon', 'date_added', 'user', 'owner')
-        owner = serializers.ReadOnlyField(source="owner.username")
+        fields = ('id', 'location_name', 'lat', 'lon', 'date_added', 'owner')
 
     def create(self, validated_data):
             return FavoriteLocations.objects.create(**validated_data)
@@ -16,11 +17,6 @@ class FavoriteLocationsSerializer(serializers.ModelSerializer):
             instance.lat = validated_data.get('lat', instance.lat)
             instance.lon = validated_data.get('lon', instance.lon)
             instance.date_added = validated_data.get('date_added', instance.date_added)
-            instance.user = validated_data.get('user', instance.user)
+            instance.owner = validated_data.get('owner', instance.user)
             instance.save()
             return instance
-
-    def delete(self, instance):
-            instance.delete()
-            return
-
