@@ -38,3 +38,6 @@ POSTGRES_PASSWORD=your_strong_password_here
 DJANGO_SECRET_KEY=your_django_secret_key_here
 DEBUG=1
 ```
+
+Backend Swagger URL
+http://127.0.0.1:8000/api/v1/swagger/

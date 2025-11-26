@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'weather_api',
     'frontend_api',
    'drf_yasg',
+    'rest_registration',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+'DEFAULT_AUTHENTICATION_CLASSES': [
+'rest_framework.authentication.TokenAuthentication',
+],
+}
+
+REST_REGISTRATION = {
+    'REGISTER_VERIFICATION_ENABLED': False,
+    'RESET_PASSWORD_VERIFICATION_ENABLED': False,
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+}
+
+# REST_REGISTRATION = {
+#     'REGISTER_VERIFICATION_URL': 'https://frontend-host/verify-user/',
+#     'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/reset-password/',
+#     'REGISTER_EMAIL_VERIFICATION_URL': 'https://frontend-host/verify-email/',
+# }

@@ -1,6 +1,6 @@
 
 from rest_framework import permissions
-from .serializers import FavoriteLocationsSerializer
+from .serializers import FavoriteLocationsSerializer, UserSerializer
 from .models import FavoriteLocations
 from rest_framework.views import APIView
 from django.http import Http404
@@ -9,6 +9,9 @@ from rest_framework import status
 from .permissions import IsOwner
 from weather_api import api_open_weather
 #from django.conf.urls import url
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+
 from rest_framework_swagger.views import get_swagger_view
 
 schema_view = get_swagger_view(title='Weather API')
@@ -76,4 +79,3 @@ class WeatherOverview(APIView):
 #         weather_data = api_open_weather.WeatherAPI()
 #         data = weather_data.get_weather_overview_one_call(lat, lon, date, units)
 #         return Response(data)
-

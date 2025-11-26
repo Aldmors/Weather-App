@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import FavoriteLocations
+from django.contrib.auth.models import User
 
 class FavoriteLocationsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,5 +23,4 @@ class FavoriteLocationsSerializer(serializers.ModelSerializer):
     def delete(self, instance):
             instance.delete()
             return
-
 
