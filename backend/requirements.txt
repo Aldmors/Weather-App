@@ -1,7 +1,10 @@
 Django~=5.2.8
-psycopg2~=2.9
 gunicorn
 python-dotenv
 django-filter
 markdown
 djangorestframework
+django-rest-swagger
+setuptools
+psycopg2-binary~=2.9
+drf-yasg

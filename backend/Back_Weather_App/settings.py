@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'weather_api',
     'frontend_api',
+   'drf_yasg',
 ]
 
 MIDDLEWARE = [

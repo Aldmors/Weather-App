@@ -36,5 +36,5 @@ class GeoCodesAPI:
         response = requests.get(f"{self.base_url}zip", params=params)
         return response.json()
 
-api = GeoCodesAPI()
-print(api.get_coords_by_location("Kraków"))
+# api = GeoCodesAPI()
+# print(api.get_coords_by_location("Kraków"))
