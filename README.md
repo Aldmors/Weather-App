@@ -41,3 +41,12 @@ DEBUG=1
 
 Backend Swagger URL
 http://127.0.0.1:8000/api/v1/swagger/
+
+
+
+<img width="808" height="904" alt="image" src="https://github.com/user-attachments/assets/3ac52ea7-6977-479a-9f6f-14b15df05665" />
+
+<img width="745" height="912" alt="image" src="https://github.com/user-attachments/assets/e9458871-8a67-4789-beac-fe6bde555942" />
+
+<img width="755" height="576" alt="image" src="https://github.com/user-attachments/assets/bbb60982-3e68-4473-9b09-0c8e5f87dcc9" />
+
