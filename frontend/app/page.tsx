@@ -1,6 +1,9 @@
 "use client";
 
 import { useWeatherApp } from './hooks/useWeatherApp';
+import DailyWeatherChart from '../components/DailyWeatherChart';
+import HourlyWeatherChart from '../components/HourlyWeatherChart';
+import MinutelyWeatherChart from '../components/MinutelyWeatherChart';
 
 export default function Home() {
   const {
@@ -91,6 +94,17 @@ export default function Home() {
                   <div className="already-favorite">✓ Already in favorites</div>
                 )}
               </>
+            )}
+
+            {/* Weather Charts */}
+            {weatherData.minutely && weatherData.minutely.length > 0 && (
+              <MinutelyWeatherChart minutely={weatherData.minutely} />
+            )}
+            {weatherData.hourly && weatherData.hourly.length > 0 && (
+              <HourlyWeatherChart hourly={weatherData.hourly} />
+            )}
+            {weatherData.daily && weatherData.daily.length > 0 && (
+              <DailyWeatherChart daily={weatherData.daily} />
             )}
           </div>
         )}
