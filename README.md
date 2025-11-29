@@ -50,3 +50,12 @@ http://127.0.0.1:8000/api/v1/swagger/
 
 <img width="755" height="576" alt="image" src="https://github.com/user-attachments/assets/bbb60982-3e68-4473-9b09-0c8e5f87dcc9" />
 
+
+<img width="451" height="354" alt="image" src="https://github.com/user-attachments/assets/872b454b-3446-4911-a06a-c685cc8f690f" />
+
+<img width="811" height="317" alt="image" src="https://github.com/user-attachments/assets/b66e45aa-5339-46a6-b32f-0b34543282de" />
+
+
+<img width="857" height="415" alt="image" src="https://github.com/user-attachments/assets/c6de6e51-ae9c-4a15-92ea-02b87cf51100" />
+
+
