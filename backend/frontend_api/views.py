@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .permissions import IsOwner
 from weather_api import api_open_weather
+from weather_api.api_geocoding import GeoCodesAPI
 #from django.conf.urls import url
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
@@ -19,7 +20,7 @@ schema_view = get_swagger_view(title='Weather API')
 class FavoriteLocationsView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
     def get(self, request):
-        favorite_locations = FavoriteLocations.objects.all()
+        favorite_locations = FavoriteLocations.objects.filter(owner=request.user)
         serializer = FavoriteLocationsSerializer(favorite_locations, many=True)
         return Response(serializer.data)
 
@@ -27,39 +28,36 @@ class FavoriteLocationsView(APIView):
     def post(self, request, format=None):
         serializer = FavoriteLocationsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
 
 
 class FavoriteLocationsDetail(APIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
-    def get_object(self, request):
-        pk = request.data.get('pk')
+    
+    def get_object(self, id, user):
         try:
-            return FavoriteLocations.objects.get(pk=pk)
+            return FavoriteLocations.objects.get(pk=id, owner=user)
         except FavoriteLocations.DoesNotExist:
             raise Http404
 
-    def get(self, request):
-        snippet = self.get_object(request)
+    def get(self, request, id):
+        snippet = self.get_object(id, request.user)
         serializer = FavoriteLocationsSerializer(snippet)
         return Response(serializer.data)
 
     @swagger_auto_schema(request_body=FavoriteLocationsSerializer)
-    def put(self, request, format=None):
-        snippet = self.get_object(request)
+    def put(self, request, id, format=None):
+        snippet = self.get_object(id, request.user)
         serializer = FavoriteLocationsSerializer(snippet, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, format=None):
-        snippet = self.get_object(request)
+    def delete(self, request, id, format=None):
+        snippet = self.get_object(id, request.user)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -76,6 +74,23 @@ class WeatherOverview(APIView):
         weather_data = api_open_weather.WeatherAPI()
         data = weather_data.get_weather_overview_one_call(lat, lon, weather_date, units)
         return Response(data)
+
+
+class GeocodingView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request):
+        location_name = request.query_params.get('q', '')
+        if not location_name:
+            return Response({'error': 'Missing location name parameter (q)'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        geocoding_api = GeoCodesAPI()
+        location_data = geocoding_api.get_coords_by_location(location_name)
+        
+        if not location_data or len(location_data) == 0:
+            return Response({'error': 'Location not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(location_data[0])
 
 # class WeatherSummary(APIView):
 #     def get(self, request, lat, lon, date, units="metric"):
