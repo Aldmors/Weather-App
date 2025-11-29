@@ -5,38 +5,44 @@ A web application built with Django and Next.js to display and save weather hist
 ## Features
 
 ### Guest User
+
 - Display weather for a selected location.
 - Display weather for the user's current location (with proper location access request).
 
 ### Logged-in User
+
 - Save and delete favorite locations.
 
 ### Admin User
+
 - View and search saved user forecasts.
 - See statistics on locations searched by both logged-in and guest users.
 
 ## Technical Details
+
 - Weather data will be fetched from an external service OpenWeatherMap.
 - Data will be cached in a database.
 
 ### Technology
 
 ### Backend
+
 - Django
 - PostgresSQL
 - Redis
 
 ### Frontend
-- NextJS with TypeScript
 
+- NextJS with TypeScript
 
 ## Deployment
 
-This project uses Docker Compose to orchestrate multiple services: PostgreSQL database, Redis cache, Django backend, and Next.js frontend.
+This project uses Docker Compose to orchestrate multiple services: PostgreSQL database, Redis cache, Django backend, and
+Next.js frontend.
 
 ### Prerequisites
 
-- Docker and dokcer compose  installed on your system
+- Docker and dokcer compose installed on your system
 - OpenWeatherMap API key One Call API 3.0  (get one at [https://openweathermap.org/api](https://openweathermap.org/api))
 
 ### Step 1: Create Environment File
@@ -58,7 +64,9 @@ WEATHER_KEY_ONE_CALL=your_openweathermap_onecall_api_key_here
 ```
 
 **Important Notes:**
-- Replace `your_django_secret_key_here` with a Django secret key (you can generate one using: `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`)
+
+- Replace `your_django_secret_key_here` with a Django secret key (you can generate one using:
+  `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`)
 - Replace `your_openweathermap_onecall_api_key_here` with your OpenWeatherMap One Call API 3.0 key for weather data
 - Set `DEBUG=0` for production deployment
 
@@ -71,6 +79,7 @@ docker-compose up
 ```
 
 This command will:
+
 1. Build the Docker images for backend and frontend
 2. Start PostgreSQL database container
 3. Start Redis cache container
@@ -92,8 +101,8 @@ docker-compose down
 ```
 
 ### Troubleshooting
-- Ensure ports 80 and 5050 are not already in use
 
+- Ensure ports 80 and 5050 are not already in use
 
 ## Main App
 

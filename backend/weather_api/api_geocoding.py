@@ -1,9 +1,10 @@
 import os
-import requests
-from django.http import HttpResponse
+
 import dotenv
+import requests
 
 dotenv.load_dotenv()
+
 
 class GeoCodesAPI:
     def __init__(self):

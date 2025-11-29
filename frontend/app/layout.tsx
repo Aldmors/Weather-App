@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
+import type {Metadata} from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Weather App",
-  description: "Search weather by location name or coordinates",
+    title: "Weather App",
+    description: "Search weather by location name or coordinates",
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body suppressHydrationWarning>{children}</body>
-    </html>
-  );
+    return (
+        <html lang="en">
+        <body suppressHydrationWarning>{children}</body>
+        </html>
+    );
 }
 

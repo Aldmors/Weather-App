@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,18 +19,16 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') # 'django-insecure-+--k_2_0is4$i=!-$=l&(kz0w*lj2v$dtj#1x34y*c(4q5vmq0'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')  # 'django-insecure-+--k_2_0is4$i=!-$=l&(kz0w*lj2v$dtj#1x34y*c(4q5vmq0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.90', '*']
-
 
 # Application definition
 
@@ -45,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'weather_api',
     'frontend_api',
-   'drf_yasg',
+    'drf_yasg',
     'rest_registration',
     'users_stats',
     'admincharts'
@@ -81,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Back_Weather_App.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -104,7 +102,6 @@ else:
         }
     }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -123,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -134,7 +130,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -147,9 +142,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-'DEFAULT_AUTHENTICATION_CLASSES': [
-'rest_framework.authentication.TokenAuthentication',
-],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
 
 REST_REGISTRATION = {
@@ -215,7 +210,7 @@ else:
     REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
     REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
     REDIS_URL = os.environ.get('REDIS_URL', f'redis://{REDIS_HOST}:{REDIS_PORT}/1')
-    
+
     CACHES = {
         'default': {
             'BACKEND': 'django_redis.cache.RedisCache',

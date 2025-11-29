@@ -1,8 +1,10 @@
-from django.contrib import admin
-from frontend_api.models import FavoriteLocations
-from .models import AnonymousUserStats, LoggedUserStats
 from admincharts.admin import AdminChartMixin
+from django.contrib import admin
 from django.db.models import Count, Sum
+from frontend_api.models import FavoriteLocations
+
+from .models import AnonymousUserStats, LoggedUserStats
+
 
 @admin.register(FavoriteLocations)
 class FavoriteLocationsAdmin(AdminChartMixin, admin.ModelAdmin):
@@ -53,6 +55,7 @@ class FavoriteLocationsAdmin(AdminChartMixin, admin.ModelAdmin):
             ],
         }
 
+
 @admin.register(AnonymousUserStats)
 class AnonymousUserStatsAdmin(AdminChartMixin, admin.ModelAdmin):
     list_display = ('location', 'count')
@@ -85,6 +88,7 @@ class AnonymousUserStatsAdmin(AdminChartMixin, admin.ModelAdmin):
                 }
             ],
         }
+
 
 @admin.register(LoggedUserStats)
 class LoggedUserStatsAdmin(AdminChartMixin, admin.ModelAdmin):
