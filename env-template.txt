@@ -1,0 +1,13 @@
+# PostgreSQL Database Configuration
+POSTGRES_DB=weather_app
+POSTGRES_USER=weather_app_user
+POSTGRES_PASSWORD=your_strong_password_here
+
+# Django Configuration
+DJANGO_SECRET_KEY=your_django_secret_key_here
+DEBUG=0
+
+# OpenWeatherMap API Keys
+# Get your API keys from: https://openweathermap.org/api
+WEATHER_KEY_ONE_CALL=your_openweathermap_onecall_api_key_here
+

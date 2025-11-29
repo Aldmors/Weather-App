@@ -10,7 +10,7 @@ dotenv.load_dotenv()
 
 class WeatherAPI:
     def __init__(self):
-        self._api_key =  os.getenv('WEATHER_KEY')
+        # self._api_key =  os.getenv('WEATHER_KEY')
         self._api_onecall_key = os.getenv('WEATHER_KEY_ONE_CALL')
         self.base_url = "https://api.openweathermap.org/data/3.0/onecall"
         self.base_url_2_5 = "https://api.openweathermap.org/data/2.5/weather"

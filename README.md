@@ -32,29 +32,67 @@ A web application built with Django and Next.js to display and save weather hist
 
 ## Deployment
 
-```
-docker-compose up
-```
+This project uses Docker Compose to orchestrate multiple services: PostgreSQL database, Redis cache, Django backend, and Next.js frontend.
 
+### Prerequisites
 
-.env
+- Docker and dokcer compose  installed on your system
+- OpenWeatherMap API key One Call API 3.0  (get one at [https://openweathermap.org/api](https://openweathermap.org/api))
+
+### Step 1: Create Environment File
+
+Create a `.env` file in the project root directory with the following environment variables:
+
 ```.env
 # PostgreSQL Database Configuration
-POSTGRES_DB=weather_app_db
+POSTGRES_DB=weather_app
 POSTGRES_USER=weather_app_user
 POSTGRES_PASSWORD=your_strong_password_here
 
 # Django Configuration
 DJANGO_SECRET_KEY=your_django_secret_key_here
 DEBUG=1
+
+# OpenWeatherMap API Keys
+WEATHER_KEY_ONE_CALL=your_openweathermap_onecall_api_key_here
 ```
 
-URL
-http://127.0.0.1:80
+**Important Notes:**
+- Replace `your_django_secret_key_here` with a Django secret key (you can generate one using: `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`)
+- Replace `your_openweathermap_onecall_api_key_here` with your OpenWeatherMap One Call API 3.0 key for weather data
+- Set `DEBUG=0` for production deployment
 
-http://127.0.0.1:5050/api/v1/swagger/
+### Step 2: Run Docker Compose
 
-http://127.0.0.1:5050/admin
+Navigate to the project root directory and run:
+
+```bash
+docker-compose up
+```
+
+This command will:
+1. Build the Docker images for backend and frontend
+2. Start PostgreSQL database container
+3. Start Redis cache container
+4. Start Django backend container (runs migrations automatically)
+5. Start Next.js frontend container
+
+### Step 3: Access the Application
+
+Once all containers are running, you can access:
+
+- **Frontend Application**: http://127.0.0.1:80
+- **Backend API Swagger Documentation**: http://127.0.0.1:5050/api/v1/swagger/
+- **Django Admin Panel**: http://127.0.0.1:5050/admin
+
+### Stopping the Application
+
+```bash
+docker-compose down
+```
+
+### Troubleshooting
+- Ensure ports 80 and 5050 are not already in use
 
 
 ## Main App
