@@ -13,6 +13,7 @@ export default function Home() {
     weatherOverview,
     loading,
     error,
+    setError,
     isLoggedIn,
     username,
     showLoginModal,
@@ -164,6 +165,11 @@ export default function Home() {
         <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+            {error && (
+              <div className="error-message" style={{ marginBottom: '1rem' }}>
+                {error}
+              </div>
+            )}
             <div className="modal-form">
               <input
                 type="text"
@@ -189,6 +195,26 @@ export default function Home() {
                 className="modal-input"
                 onKeyPress={(e) => e.key === 'Enter' && (isRegistering ? handleRegister() : handleLogin())}
               />
+              {isRegistering && (
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={loginData.password_confirm}
+                  onChange={(e) => setLoginData({ ...loginData, password_confirm: e.target.value })}
+                  className="modal-input"
+                  onKeyPress={(e) => e.key === 'Enter' && handleRegister()}
+                />
+              )}
+              {isRegistering && loginData.password.length > 0 && loginData.password.length < 12 && (
+                <div className="error-message" style={{ fontSize: '0.875rem', marginTop: '-0.5rem', marginBottom: '0.5rem' }}>
+                  Password must be at least 12 characters long
+                </div>
+              )}
+              {isRegistering && loginData.password_confirm.length > 0 && loginData.password !== loginData.password_confirm && (
+                <div className="error-message" style={{ fontSize: '0.875rem', marginTop: '-0.5rem', marginBottom: '0.5rem' }}>
+                  Passwords do not match
+                </div>
+              )}
               <div className="modal-actions">
                 <button 
                   onClick={isRegistering ? handleRegister : handleLogin} 
@@ -199,7 +225,8 @@ export default function Home() {
                 <button 
                   onClick={() => {
                     setIsRegistering(!isRegistering);
-                    setLoginData({ login: '', password: '', email: '' });
+                    setLoginData({ login: '', password: '', password_confirm: '', email: '' });
+                    setError('');
                   }} 
                   className="btn btn-link"
                 >
@@ -210,7 +237,8 @@ export default function Home() {
                 onClick={() => {
                   setShowLoginModal(false);
                   setIsRegistering(false);
-                  setLoginData({ login: '', password: '', email: '' });
+                  setLoginData({ login: '', password: '', password_confirm: '', email: '' });
+                  setError('');
                 }} 
                 className="btn-close"
               >

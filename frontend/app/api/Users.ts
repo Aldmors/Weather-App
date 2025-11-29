@@ -129,10 +129,24 @@ export async function registerEmail(data: any) {
 
 // POST /v1/accounts/register/
 export async function register(data: any) {
-  return fetchWithAuth("http://localhost:5050/api/v1/accounts/register/", {
+  const res = await fetch("http://localhost:5050/api/v1/accounts/register/", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(data),
   });
+  
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({ detail: res.statusText }));
+    throw errorData;
+  }
+  
+  const responseData = await res.json();
+  if (responseData.token) {
+    setToken(responseData.token);
+  }
+  return responseData;
 }
 
 // POST /v1/accounts/reset-password/

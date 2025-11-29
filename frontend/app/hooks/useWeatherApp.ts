@@ -14,7 +14,7 @@ export function useWeatherApp() {
   const [username, setUsername] = useState<string>('')
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [isRegistering, setIsRegistering] = useState(false)
-  const [loginData, setLoginData] = useState({ login: '', password: '', email: '' })
+  const [loginData, setLoginData] = useState({ login: '', password: '', password_confirm: '', email: '' })
   const [favorites, setFavorites] = useState<FavoriteLocation[]>([])
   const [currentLocation, setCurrentLocation] = useState<{ name: string; lat: number; lon: number } | null>(null)
 
@@ -157,7 +157,7 @@ export function useWeatherApp() {
         setIsLoggedIn(true)
         setUsername(loginData.login)
         setShowLoginModal(false)
-        setLoginData({ login: '', password: '', email: '' })
+        setLoginData({ login: '', password: '', password_confirm: '', email: '' })
         await loadFavorites()
       }
     } catch (err: any) {
@@ -166,23 +166,54 @@ export function useWeatherApp() {
   }
 
   async function handleRegister() {
+    // Client-side validation
+    if (loginData.password.length < 12) {
+      setError('Password must be at least 12 characters long.')
+      return
+    }
+
+    if (loginData.password !== loginData.password_confirm) {
+      setError('Passwords do not match.')
+      return
+    }
+
+    setError('')
+    
     try {
       const response = await register({
         username: loginData.login,
         password: loginData.password,
+        password_confirm: loginData.password_confirm,
         email: loginData.email
       })
       
       if (response.token) {
         setIsLoggedIn(true)
         setUsername(loginData.login)
-        setShowLoginModal(false)
+        setError('')
+        setLoginData({ login: '', password: '', password_confirm: '', email: '' })
         setIsRegistering(false)
-        setLoginData({ login: '', password: '', email: '' })
+        setShowLoginModal(false)
         await loadFavorites()
       }
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.')
+      // Handle API validation errors
+      if (err && typeof err === 'object') {
+        // Extract error messages from Django REST Framework error format
+        const errorMessages: string[] = []
+        for (const [key, value] of Object.entries(err)) {
+          if (Array.isArray(value)) {
+            errorMessages.push(...value.map((msg: string) => `${key}: ${msg}`))
+          } else if (typeof value === 'string') {
+            errorMessages.push(`${key}: ${value}`)
+          } else if (Array.isArray(value)) {
+            errorMessages.push(...value)
+          }
+        }
+        setError(errorMessages.length > 0 ? errorMessages.join(', ') : 'Registration failed. Please try again.')
+      } else {
+        setError(err?.message || 'Registration failed. Please try again.')
+      }
     }
   }
 
@@ -266,6 +297,7 @@ export function useWeatherApp() {
     weatherOverview,
     loading,
     error,
+    setError,
     isLoggedIn,
     username,
     showLoginModal,
