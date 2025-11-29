@@ -10,3 +10,4 @@ psycopg2-binary~=2.9
 drf-yasg
 django-rest-registration
 django-cors-headers
+django-redis

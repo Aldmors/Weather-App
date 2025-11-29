@@ -196,3 +196,32 @@ CORS_ALLOW_HEADERS = [
 #     'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/reset-password/',
 #     'REGISTER_EMAIL_VERIFICATION_URL': 'https://frontend-host/verify-email/',
 # }
+
+# Cache Configuration
+# Use LocMemCache in development (DEBUG=True), Redis in production (DEBUG=False)
+if DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'KEY_PREFIX': 'weather_app',
+            'TIMEOUT': 600,  # 10 minutes default timeout
+        }
+    }
+else:
+    # Redis Cache Configuration for production
+    # Use Redis container name in Docker, localhost in development
+    REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+    REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
+    REDIS_URL = os.environ.get('REDIS_URL', f'redis://{REDIS_HOST}:{REDIS_PORT}/1')
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            },
+            'KEY_PREFIX': 'weather_app',
+            'TIMEOUT': 600,  # 10 minutes default timeout
+        }
+    }

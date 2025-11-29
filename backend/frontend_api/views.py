@@ -9,9 +9,7 @@ from rest_framework import status
 from .permissions import IsOwner
 from weather_api import api_open_weather
 from weather_api.api_geocoding import GeoCodesAPI
-#from django.conf.urls import url
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
+from django.core.cache import cache
 
 from rest_framework_swagger.views import get_swagger_view
 
@@ -64,15 +62,38 @@ class FavoriteLocationsDetail(APIView):
 
 class WeatherData(APIView):
     def get(self, request,  lat, lon, units="metric"):
+        # Create a cache key based on lat, lon, and units
+        cache_key = f'weather_data_{lat}_{lon}_{units}'
+        
+
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
         weather_data = api_open_weather.WeatherAPI()
         data = weather_data.get_weather(lat, lon, units)
+        
+
+        cache.set(cache_key, data)
+        
         return Response(data)
 
 
 class WeatherOverview(APIView):
     def get(self, request, lat, lon, weather_date="", units="metric"):
+        # Create a cache key based on lat, lon, weather_date, and units
+        cache_key = f'weather_overview_{lat}_{lon}_{weather_date}_{units}'
+        
+
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
         weather_data = api_open_weather.WeatherAPI()
         data = weather_data.get_weather_overview_one_call(lat, lon, weather_date, units)
+
+        cache.set(cache_key, data, timeout=600)
+        
         return Response(data)
 
 
