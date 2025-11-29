@@ -187,15 +187,18 @@ export function useWeatherApp() {
         email: loginData.email
       })
       
+      // Registration successful - close modal and update state
       if (response.token) {
         setIsLoggedIn(true)
         setUsername(loginData.login)
-        setError('')
-        setLoginData({ login: '', password: '', password_confirm: '', email: '' })
-        setIsRegistering(false)
-        setShowLoginModal(false)
         await loadFavorites()
       }
+      
+      // Close modal on successful registration (no errors)
+      setError('')
+      setLoginData({ login: '', password: '', password_confirm: '', email: '' })
+      setIsRegistering(false)
+      setShowLoginModal(false)
     } catch (err: any) {
       // Handle API validation errors
       if (err && typeof err === 'object') {
