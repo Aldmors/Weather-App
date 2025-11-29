@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'frontend_api',
    'drf_yasg',
     'rest_registration',
-    'users_stats'
+    'users_stats',
+    'admincharts'
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'Back_Weather_App.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
