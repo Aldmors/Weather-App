@@ -75,3 +75,6 @@ http://127.0.0.1:5050/admin
 
 
 <img width="857" height="415" alt="image" src="https://github.com/user-attachments/assets/c6de6e51-ae9c-4a15-92ea-02b87cf51100" />
+
+<img width="405" height="399" alt="image" src="https://github.com/user-attachments/assets/9e22fb8f-ac18-4032-8d6c-08d6ae0de3b9" />
+
