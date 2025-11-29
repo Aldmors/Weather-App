@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'frontend_api',
    'drf_yasg',
     'rest_registration',
+    'users_stats'
 ]
 
 MIDDLEWARE = [
