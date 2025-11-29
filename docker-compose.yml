@@ -19,11 +19,11 @@ services:
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
-             gunicorn Back_Weather_App.wsgi:application --bind 0.0.0.0:8000"
+             gunicorn Back_Weather_App.wsgi:application --bind 0.0.0.0:5050"
     volumes:
       - ./backend:/app
     ports:
-      - "8000:8000"
+      - "5050:5050"
     environment:
       - DEBUG=1
       - POSTGRES_USER=${POSTGRES_USER}
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       - NODE_ENV=production
     depends_on:
