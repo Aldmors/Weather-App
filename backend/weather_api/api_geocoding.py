@@ -7,7 +7,7 @@ dotenv.load_dotenv()
 
 class GeoCodesAPI:
     def __init__(self):
-        self._api_key = os.getenv('WEATHER_KEY')
+        self._api_key = os.getenv('WEATHER_KEY_ONE_CALL')
 
         self.base_url = "http://api.openweathermap.org/geo/1.0/"
 
