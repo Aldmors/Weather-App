@@ -39,7 +39,7 @@ export default function HourlyWeatherChart({ hourly }: HourlyWeatherChartProps) 
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="time" angle={-45} textAnchor="end" height={80} />
           <YAxis yAxisId="left" label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }} />
-          <YAxis yAxisId="right" orientation="right" label={{ value: 'Humidity (%) / Precipitation (%)', angle: 90, position: 'insideRight' }} />
+          <YAxis yAxisId="right" orientation="right" label={{ value: '', angle: 90, position: 'insideRight' }} />
           <Tooltip />
           <Legend />
           <Line yAxisId="left" type="monotone" dataKey="temp" stroke="#ff6b6b" strokeWidth={2} name="Temperature (°C)" />

@@ -9,18 +9,28 @@ A web application built with Django and Next.js to display and save weather hist
 - Display weather for the user's current location (with proper location access request).
 
 ### Logged-in User
-- Save favorite locations.
-- Save up to 'x' weather forecasts (where 'x' is determined by the administrator).
+- Save and delete favorite locations.
 
 ### Admin User
 - View and search saved user forecasts.
 - See statistics on locations searched by both logged-in and guest users.
 
 ## Technical Details
-- Weather data will be fetched from an external service (e.g., OpenWeatherMap).
-- Data will be stored in a database.
-- The entire application will be based on Docker Compose for easy setup and local installation with a single command.
+- Weather data will be fetched from an external service OpenWeatherMap.
+- Data will be cached in a database.
 
+### Technology
+
+### Backend
+- Django
+- PostgresSQL
+- Redis
+
+### Frontend
+- NextJS with TypeScript
+
+
+## Deployment
 
 ```
 docker-compose up
@@ -39,5 +49,9 @@ DJANGO_SECRET_KEY=your_django_secret_key_here
 DEBUG=1
 ```
 
-Backend Swagger URL
-http://127.0.0.1:8000/api/v1/swagger/
+URL
+http://127.0.0.1:80
+
+http://127.0.0.1:5050/api/v1/swagger/
+
+http://127.0.0.1:5050/admin

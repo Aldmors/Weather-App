@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getWeatherData } from '../api/WeatherData'
+import { getWeatherData, getWeatherOverview } from '../api/WeatherData'
 import { getCoordinatesByLocation } from '../api/Geocoding'
 import { login, logout, getProfile, register } from '../api/Users'
 import { getFavoriteLocations, createFavoriteLocation, deleteFavoriteLocation } from '../api/FavoriteLocations'
@@ -7,12 +7,14 @@ import { getFavoriteLocations, createFavoriteLocation, deleteFavoriteLocation } 
 export function useWeatherApp() {
   const [searchInput, setSearchInput] = useState('')
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
+  const [weatherOverview, setWeatherOverview] = useState<WeatherOverview | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [username, setUsername] = useState<string>('')
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [isRegistering, setIsRegistering] = useState(false)
-  const [loginData, setLoginData] = useState({ username: '', password: '', email: '' })
+  const [loginData, setLoginData] = useState({ login: '', password: '', email: '' })
   const [favorites, setFavorites] = useState<FavoriteLocation[]>([])
   const [currentLocation, setCurrentLocation] = useState<{ name: string; lat: number; lon: number } | null>(null)
 
@@ -32,11 +34,16 @@ export function useWeatherApp() {
     if (!token) return
 
     try {
-      await getProfile()
+      const profile = await getProfile()
       setIsLoggedIn(true)
+    
+      
+        setUsername(profile.username)
+      
     } catch (err) {
       localStorage.removeItem('token')
       setIsLoggedIn(false)
+      setUsername('')
     }
   }
 
@@ -76,6 +83,14 @@ export function useWeatherApp() {
     )
   }
 
+  function getTodayDate(): string {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = String(today.getMonth() + 1).padStart(2, '0')
+    const day = String(today.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   // Handler functions
   async function handleSearch() {
     if (!searchInput.trim()) {
@@ -112,9 +127,20 @@ export function useWeatherApp() {
       })
       
       setCurrentLocation({ name: locationName, lat, lon })
+
+      // Fetch weather overview
+      try {
+        const todayDate = getTodayDate()
+        const overview = await getWeatherOverview(lat.toString(), lon.toString(), todayDate)
+        setWeatherOverview(overview)
+      } catch (overviewErr) {
+        console.error('Failed to fetch weather overview:', overviewErr)
+        setWeatherOverview(null)
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to fetch weather data. Please check your input.')
       setWeatherData(null)
+      setWeatherOverview(null)
     } finally {
       setLoading(false)
     }
@@ -123,14 +149,15 @@ export function useWeatherApp() {
   async function handleLogin() {
     try {
       const response = await login({
-        username: loginData.username,
+        login: loginData.login,
         password: loginData.password
       })
       
       if (response.token) {
         setIsLoggedIn(true)
+        setUsername(loginData.login)
         setShowLoginModal(false)
-        setLoginData({ username: '', password: '', email: '' })
+        setLoginData({ login: '', password: '', email: '' })
         await loadFavorites()
       }
     } catch (err: any) {
@@ -141,16 +168,17 @@ export function useWeatherApp() {
   async function handleRegister() {
     try {
       const response = await register({
-        username: loginData.username,
+        username: loginData.login,
         password: loginData.password,
         email: loginData.email
       })
       
       if (response.token) {
         setIsLoggedIn(true)
+        setUsername(loginData.login)
         setShowLoginModal(false)
         setIsRegistering(false)
-        setLoginData({ username: '', password: '', email: '' })
+        setLoginData({ login: '', password: '', email: '' })
         await loadFavorites()
       }
     } catch (err: any) {
@@ -162,11 +190,13 @@ export function useWeatherApp() {
     try {
       await logout({})
       setIsLoggedIn(false)
+      setUsername('')
       setFavorites([])
       setCurrentLocation(null)
     } catch (err) {
       localStorage.removeItem('token')
       setIsLoggedIn(false)
+      setUsername('')
       setFavorites([])
     }
   }
@@ -211,8 +241,19 @@ export function useWeatherApp() {
         lat: favorite.lat,
         lon: favorite.lon
       })
+
+      // Fetch weather overview
+      try {
+        const todayDate = getTodayDate()
+        const overview = await getWeatherOverview(favorite.lat.toString(), favorite.lon.toString(), todayDate)
+        setWeatherOverview(overview)
+      } catch (overviewErr) {
+        console.error('Failed to fetch weather overview:', overviewErr)
+        setWeatherOverview(null)
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to fetch weather data')
+      setWeatherOverview(null)
     } finally {
       setLoading(false)
     }
@@ -222,9 +263,11 @@ export function useWeatherApp() {
     searchInput,
     setSearchInput,
     weatherData,
+    weatherOverview,
     loading,
     error,
     isLoggedIn,
+    username,
     showLoginModal,
     setShowLoginModal,
     isRegistering,
@@ -327,4 +370,13 @@ export interface FavoriteLocation {
   lat: number
   lon: number
   date_added: string
+}
+
+export interface WeatherOverview {
+  lat: number
+  lon: number
+  tz?: string
+  date?: string
+  units?: string
+  weather_overview: string
 }

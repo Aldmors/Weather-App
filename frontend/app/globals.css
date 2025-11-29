@@ -29,10 +29,28 @@ header {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+header .header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+header .header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 header h1 {
   margin: 0;
   color: #333;
   font-size: 28px;
+}
+
+header .username {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .search-container {
@@ -300,6 +318,32 @@ header h1 {
 .btn-close:hover {
   background-color: #f0f0f0;
   color: #333;
+}
+
+/* Location Coordinates */
+.location-coords {
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+
+/* Weather Overview Description */
+.weather-overview-description {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #45b7d1;
+  margin-bottom: 20px;
+}
+
+.weather-overview-description p {
+  margin: 0;
+  color: #333;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 /* Chart Styles */

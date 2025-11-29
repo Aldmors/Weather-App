@@ -36,7 +36,7 @@ export default function DailyWeatherChart({ daily }: DailyWeatherChartProps) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
           <YAxis yAxisId="left" label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }} />
-          <YAxis yAxisId="right" orientation="right" label={{ value: 'Humidity (%)', angle: 90, position: 'insideRight' }} />
+          <YAxis yAxisId="right" orientation="right" label={{ value: '', angle: 90, position: 'insideRight' }} />
           <Tooltip />
           <Legend />
           <Line yAxisId="left" type="monotone" dataKey="maxTemp" stroke="#ff6b6b" strokeWidth={2} name="Max Temp (°C)" />

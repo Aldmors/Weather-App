@@ -10,9 +10,11 @@ export default function Home() {
     searchInput,
     setSearchInput,
     weatherData,
+    weatherOverview,
     loading,
     error,
     isLoggedIn,
+    username,
     showLoginModal,
     setShowLoginModal,
     isRegistering,
@@ -34,8 +36,13 @@ export default function Home() {
   return (
     <div className="container">
       <header>
-        <h1>⛅ Weather App</h1>
-        <div>
+        <div className="header-left">
+          <h1>⛅ Weather App</h1>
+        </div>
+        <div className="header-right">
+          {isLoggedIn && username && (
+            <span className="username">{username}</span>
+          )}
           {isLoggedIn ? (
             <button onClick={handleLogout} className="btn btn-secondary">
               Logout
@@ -65,49 +72,6 @@ export default function Home() {
         </div>
         
         {error && <div className="error-message">{error}</div>}
-
-        {/* Weather Display */}
-        {weatherData && (
-          <div className="weather-info">
-            <h2>{weatherData.location || 'Weather Information'}</h2>
-            {weatherData.current && (
-              <>
-                <div className="weather-main">
-                  <div className="temp">
-                    {Math.round(weatherData.current.temp)}°C
-                  </div>
-                  {weatherData.current.weather && weatherData.current.weather[0] && (
-                    <div className="weather-details">
-                      <p><strong>Condition:</strong> {weatherData.current.weather[0].main}</p>
-                      <p><strong>Description:</strong> {weatherData.current.weather[0].description}</p>
-                      <p><strong>Humidity:</strong> {weatherData.current.humidity}%</p>
-                      <p><strong>Wind Speed:</strong> {weatherData.current.wind_speed} m/s</p>
-                    </div>
-                  )}
-                </div>
-                {isLoggedIn && currentLocation && !isLocationInFavorites() && (
-                  <button onClick={handleAddToFavorites} className="btn btn-favorite">
-                    ⭐ Add to Favorites
-                  </button>
-                )}
-                {isLoggedIn && currentLocation && isLocationInFavorites() && (
-                  <div className="already-favorite">✓ Already in favorites</div>
-                )}
-              </>
-            )}
-
-            {/* Weather Charts */}
-            {weatherData.minutely && weatherData.minutely.length > 0 && (
-              <MinutelyWeatherChart minutely={weatherData.minutely} />
-            )}
-            {weatherData.hourly && weatherData.hourly.length > 0 && (
-              <HourlyWeatherChart hourly={weatherData.hourly} />
-            )}
-            {weatherData.daily && weatherData.daily.length > 0 && (
-              <DailyWeatherChart daily={weatherData.daily} />
-            )}
-          </div>
-        )}
 
         {/* Favorites Section */}
         {isLoggedIn && favorites.length > 0 && (
@@ -140,6 +104,59 @@ export default function Home() {
             <p>No favorite locations yet. Search for a location and add it to your favorites!</p>
           </div>
         )}
+
+        {/* Weather Display */}
+        {weatherData && (
+          <div className="weather-info">
+            <h2>{weatherData.location || 'Weather Information'}</h2>
+            {(weatherData.lat !== undefined && weatherData.lon !== undefined) && (
+              <div className="location-coords">
+                {weatherData.lat.toFixed(6)}, {weatherData.lon.toFixed(6)}
+              </div>
+            )}
+            {weatherData.current && (
+              <>
+                <div className="weather-main">
+                  <div className="temp">
+                    {Math.round(weatherData.current.temp)}°C
+                  </div>
+                  {weatherData.current.weather && weatherData.current.weather[0] && (
+                    <div className="weather-details">
+                      <p><strong>Condition:</strong> {weatherData.current.weather[0].main}</p>
+                      <p><strong>Description:</strong> {weatherData.current.weather[0].description}</p>
+                      <p><strong>Humidity:</strong> {weatherData.current.humidity}%</p>
+                      <p><strong>Wind Speed:</strong> {weatherData.current.wind_speed} m/s</p>
+                    </div>
+                  )}
+                </div>
+                {isLoggedIn && currentLocation && !isLocationInFavorites() && (
+                  <button onClick={handleAddToFavorites} className="btn btn-favorite">
+                    ⭐ Add to Favorites
+                  </button>
+                )}
+                {isLoggedIn && currentLocation && isLocationInFavorites() && (
+                  <div className="already-favorite">✓ Already in favorites</div>
+                )}
+              </>
+            )}
+
+            {/* Weather Charts */}
+            {weatherOverview && weatherOverview.weather_overview && (
+              <div className="weather-overview-description">
+                <p>{weatherOverview.weather_overview}</p>
+              </div>
+            )}
+            {weatherData.minutely && weatherData.minutely.length > 0 && (
+              <MinutelyWeatherChart minutely={weatherData.minutely} />
+            )}
+            {weatherData.hourly && weatherData.hourly.length > 0 && (
+              <HourlyWeatherChart hourly={weatherData.hourly} />
+            )}
+            {weatherData.daily && weatherData.daily.length > 0 && (
+              <DailyWeatherChart daily={weatherData.daily} />
+            )}
+          </div>
+        )}
       </main>
 
       {/* Login/Register Modal */}
@@ -151,8 +168,8 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Username"
-                value={loginData.username}
-                onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                value={loginData.login}
+                onChange={(e) => setLoginData({ ...loginData, login: e.target.value })}
                 className="modal-input"
               />
               {isRegistering && (
@@ -182,7 +199,7 @@ export default function Home() {
                 <button 
                   onClick={() => {
                     setIsRegistering(!isRegistering);
-                    setLoginData({ username: '', password: '', email: '' });
+                    setLoginData({ login: '', password: '', email: '' });
                   }} 
                   className="btn btn-link"
                 >
@@ -193,7 +210,7 @@ export default function Home() {
                 onClick={() => {
                   setShowLoginModal(false);
                   setIsRegistering(false);
-                  setLoginData({ username: '', password: '', email: '' });
+                  setLoginData({ login: '', password: '', email: '' });
                 }} 
                 className="btn-close"
               >
