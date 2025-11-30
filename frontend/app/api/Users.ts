@@ -1,3 +1,5 @@
+import {fetchWithAuth} from "./apiUtils";
+
 let token: string | null = null;
 
 function getToken() {
@@ -26,36 +28,9 @@ function clearToken() {
     }
 }
 
-async function fetchWithAuth(url: string, options: RequestInit = {}) {
-    const authToken = getToken();
-    const headers = {
-        "Content-Type": "application/json",
-        ...options.headers,
-    };
-
-    if (authToken) {
-        (headers as any).Authorization = `Token ${authToken}`;
-    }
-
-    const res = await fetch(url, {...options, headers});
-
-    if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.statusText}`);
-    }
-
-    // Handle empty responses (e.g., 204 No Content for DELETE)
-    const contentType = res.headers.get("content-type");
-    if (res.status === 204 || !contentType || !contentType.includes("application/json")) {
-        return null;
-    }
-
-    return res.json();
-}
-
-
 // POST /v1/accounts/change-password/
 export async function changePassword(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/change-password/", {
+    return fetchWithAuth(`/accounts/change-password/`, {
         method: "POST",
         body: JSON.stringify(data),
     });
@@ -63,17 +38,10 @@ export async function changePassword(data: any) {
 
 // POST /v1/accounts/login/
 export async function login(data: any) {
-    const res = await fetch("http://localhost:5050/api/v1/accounts/login/", {
+    const responseData = await fetchWithAuth(`/accounts/login/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
         body: JSON.stringify(data),
     });
-    if (!res.ok) {
-        throw new Error("Failed to login");
-    }
-    const responseData = await res.json();
     if (responseData.token) {
         setToken(responseData.token);
     }
@@ -82,7 +50,7 @@ export async function login(data: any) {
 
 // POST /v1/accounts/logout/
 export async function logout(data: any) {
-    const res = await fetchWithAuth("http://localhost:5050/api/v1/accounts/logout/", {
+    const res = await fetchWithAuth(`/accounts/logout/`, {
         method: "POST",
         body: JSON.stringify(data),
     });
@@ -92,12 +60,12 @@ export async function logout(data: any) {
 
 // GET /v1/accounts/profile/
 export async function getProfile() {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/profile/");
+    return fetchWithAuth(`/accounts/profile/`);
 }
 
 // POST /v1/accounts/profile/
 export async function createProfile(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/profile/", {
+    return fetchWithAuth(`/accounts/profile/`, {
         method: "POST",
         body: JSON.stringify(data),
     });
@@ -105,7 +73,7 @@ export async function createProfile(data: any) {
 
 // PUT /v1/accounts/profile/
 export async function updateProfile(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/profile/", {
+    return fetchWithAuth(`/accounts/profile/`, {
         method: "PUT",
         body: JSON.stringify(data),
     });
@@ -113,7 +81,7 @@ export async function updateProfile(data: any) {
 
 // PATCH /v1/accounts/profile/
 export async function patchProfile(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/profile/", {
+    return fetchWithAuth(`/accounts/profile/`, {
         method: "PATCH",
         body: JSON.stringify(data),
     });
@@ -121,7 +89,7 @@ export async function patchProfile(data: any) {
 
 // POST /v1/accounts/register-email/
 export async function registerEmail(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/register-email/", {
+    return fetchWithAuth(`/accounts/register-email/`, {
         method: "POST",
         body: JSON.stringify(data),
     });
@@ -129,20 +97,10 @@ export async function registerEmail(data: any) {
 
 // POST /v1/accounts/register/
 export async function register(data: any) {
-    const res = await fetch("http://localhost:5050/api/v1/accounts/register/", {
+    const responseData = await fetchWithAuth(`/accounts/register/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
         body: JSON.stringify(data),
     });
-
-    if (!res.ok) {
-        const errorData = await res.json().catch(() => ({detail: res.statusText}));
-        throw errorData;
-    }
-
-    const responseData = await res.json();
     if (responseData.token) {
         setToken(responseData.token);
     }
@@ -151,7 +109,7 @@ export async function register(data: any) {
 
 // POST /v1/accounts/reset-password/
 export async function resetPassword(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/reset-password/", {
+    return fetchWithAuth(`/accounts/reset-password/`, {
         method: "POST",
         body: JSON.stringify(data),
     });
@@ -159,7 +117,7 @@ export async function resetPassword(data: any) {
 
 // POST /v1/accounts/send-reset-password-link/
 export async function sendResetPasswordLink(data: any) {
-    return fetchWithAuth("http://localhost:5050/api/v1/accounts/send-reset-password-link/", {
+    return fetchWithAuth(`/accounts/send-reset-password-link/`, {
         method: "POST",
         body: JSON.stringify(data),
     });
