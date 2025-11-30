@@ -106,13 +106,20 @@ class GeocodingView(APIView):
         if not location_name:
             return Response({'error': 'Missing location name parameter (q)'}, status=status.HTTP_400_BAD_REQUEST)
 
+        cache_key = f'geocoding_{location_name}'
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data)
+
         geocoding_api = GeoCodesAPI()
         location_data = geocoding_api.get_coords_by_location(location_name)
 
-        if not location_data or len(location_data) == 0:
+        if not isinstance(location_data, list) or not location_data:
             return Response({'error': 'Location not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(location_data[0])
+        response_data = location_data[0]
+        cache.set(cache_key, response_data)
+        return Response(response_data)
 
 # class WeatherSummary(APIView):
 #     def get(self, request, lat, lon, date, units="metric"):

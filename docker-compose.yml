@@ -35,12 +35,13 @@ services:
     ports:
       - "5050:5050"
     environment:
-      - DEBUG=0
+      - DEBUG=1
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - WEATHER_KEY_ONE_CALL=${WEATHER_KEY_ONE_CALL}
     depends_on:
       - db
       - redis
