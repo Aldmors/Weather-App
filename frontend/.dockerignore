@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+
+# Directory matches
+**/temp/
+
+# Node.js specific
+.npm
+.yarn
+coverage/
+.nyc_output/
+certificates/
+.next/
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+/build

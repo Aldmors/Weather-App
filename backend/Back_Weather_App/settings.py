@@ -166,17 +166,9 @@ REST_REGISTRATION = {
     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
 }
 
-# CORS Configuration
-if DEBUG:
-    # Allow all origins in development
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    # Restrict to specific origins in production
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://192.168.0.90:3000",
-    ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -201,11 +193,6 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# REST_REGISTRATION = {
-#     'REGISTER_VERIFICATION_URL': 'https://frontend-host/verify-user/',
-#     'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/reset-password/',
-#     'REGISTER_EMAIL_VERIFICATION_URL': 'https://frontend-host/verify-email/',
-# }
 
 # Cache Configuration
 # Use LocMemCache in development (DEBUG=True), Redis in production (DEBUG=False)
