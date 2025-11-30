@@ -11,7 +11,7 @@ class WeatherAPI:
         # self._api_key =  os.getenv('WEATHER_KEY')
         self._api_onecall_key = os.getenv('WEATHER_KEY_ONE_CALL')
         self.base_url = "https://api.openweathermap.org/data/3.0/onecall"
-        self.base_url_2_5 = "https://api.openweathermap.org/data/2.5/weather"
+       #  self.base_url_2_5 = "https://api.openweathermap.org/data/2.5/weather"
 
     def get_weather(self, lat, lon, units="metric"):
         """
@@ -81,11 +81,3 @@ class WeatherAPI:
 #     }
 #     response = requests.get(self.base_url_2_5, params=params)
 #     return response.json()
-
-
-#
-# api = WeatherAPI()
-# y = json.dumps(api.get_weather("50.0619474", "19.9368564"))
-# print(y)
-
-# print(api.get_current_weather_by_city_name_2_5("Kraków"))
