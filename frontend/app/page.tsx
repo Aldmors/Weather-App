@@ -25,6 +25,7 @@ export default function Home() {
         favorites,
         currentLocation,
         handleSearch,
+        handleCurrentLocation,
         handleLogin,
         handleRegister,
         handleLogout,
@@ -69,6 +70,9 @@ export default function Home() {
                     />
                     <button onClick={handleSearch} disabled={loading} className="btn btn-primary">
                         {loading ? 'Searching...' : 'Search Weather'}
+                    </button>
+                    <button onClick={handleCurrentLocation} disabled={loading} className="btn btn-secondary">
+                        Get Current Location
                     </button>
                 </div>
 

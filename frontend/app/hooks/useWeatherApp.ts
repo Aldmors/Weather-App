@@ -146,6 +146,50 @@ export function useWeatherApp() {
         }
     }
 
+    async function handleCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const {latitude, longitude} = position.coords
+                setSearchInput(`${latitude}, ${longitude}`)
+                setError('')
+                setLoading(true)
+
+                try {
+                    const weather = await getWeatherData(latitude.toString(), longitude.toString(), "Current Location")
+
+                    setWeatherData({
+                        ...weather,
+                        location: "Current Location",
+                        lat: latitude,
+                        lon: longitude
+                    })
+
+                    setCurrentLocation({name: "Current Location", lat: latitude, lon: longitude})
+
+                    // Fetch weather overview
+                    try {
+                        const todayDate = getTodayDate()
+                        const overview = await getWeatherOverview(latitude.toString(), longitude.toString(), todayDate)
+                        setWeatherOverview(overview)
+                    } catch (overviewErr) {
+                        console.error('Failed to fetch weather overview:', overviewErr)
+                        setWeatherOverview(null)
+                    }
+                } catch (err: any) {
+                    setError(err.message || 'Failed to fetch weather data for current location.')
+                    setWeatherData(null)
+                    setWeatherOverview(null)
+                } finally {
+                    setLoading(false)
+                }
+            }, (error) => {
+                setError(`Error getting current location: ${error.message}`)
+            })
+        } else {
+            setError("Geolocation is not supported by this browser.")
+        }
+    }
+
     async function handleLogin() {
         try {
             const response = await login({
@@ -312,6 +356,7 @@ export function useWeatherApp() {
         favorites,
         currentLocation,
         handleSearch,
+        handleCurrentLocation,
         handleLogin,
         handleRegister,
         handleLogout,
