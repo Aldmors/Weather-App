@@ -117,7 +117,7 @@ export function useWeatherApp() {
                 locationName = coordsData.name || parsed.name!
             }
 
-            const weather = await getWeatherData(lat.toString(), lon.toString())
+            const weather = await getWeatherData(lat.toString(), lon.toString(), locationName.toString())
 
             setWeatherData({
                 ...weather,
@@ -268,7 +268,7 @@ export function useWeatherApp() {
         setError('')
 
         try {
-            const weather = await getWeatherData(favorite.lat.toString(), favorite.lon.toString())
+            const weather = await getWeatherData(favorite.lat.toString(), favorite.lon.toString(), favorite.location_name.toString())
             setWeatherData({
                 ...weather,
                 location: favorite.location_name,

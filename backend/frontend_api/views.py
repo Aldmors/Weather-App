@@ -63,7 +63,7 @@ class FavoriteLocationsDetail(APIView):
 
 
 class WeatherData(APIView):
-    def get(self, request, lat, lon, units="metric"):
+    def get(self, request, lat, lon, location = None, units="metric", ):
         # Create a cache key based on lat, lon, and units
         cache_key = f'weather_data_{lat}_{lon}_{units}'
 
@@ -75,8 +75,10 @@ class WeatherData(APIView):
         data = weather_data.get_weather(lat, lon, units)
 
         cache.set(cache_key, data)
+        response_data = data.copy()
+        response_data['location'] = location
 
-        return Response(data)
+        return Response(response_data)
 
 
 class WeatherOverview(APIView):

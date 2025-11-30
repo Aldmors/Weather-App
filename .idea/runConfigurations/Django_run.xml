@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Dev run" type="Python.DjangoServer" factoryName="Django server">
+  <configuration default="false" name="Django run" type="Python.DjangoServer" factoryName="Django server">
     <module name="Weather-App" />
     <option name="ENV_FILES" value="$PROJECT_DIR$/.env" />
     <option name="INTERPRETER_OPTIONS" value="" />

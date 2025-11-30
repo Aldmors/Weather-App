@@ -26,9 +26,9 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
 
 // Client-side function to get weather data
-export async function getWeatherData(lat: string, lon: string) {
+export async function getWeatherData(lat: string, lon: string, location_place: string) {
     return fetchWithAuth(
-        `http://localhost:5050/api/v1/weather/${lat}/${lon}/`
+        `http://localhost:5050/api/v1/weather/${lat}/${lon}/${location_place}`
     );
 }
 
