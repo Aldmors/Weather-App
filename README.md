@@ -105,6 +105,8 @@ docker-compose down
 - Ensure ports 80 and 5050 are not already in use
 
 ## Main App
+<img width="842" height="499" alt="image" src="https://github.com/user-attachments/assets/2435824b-eeae-4cba-aab3-b8cd71487723" />
+
 
 <img width="808" height="904" alt="image" src="https://github.com/user-attachments/assets/3ac52ea7-6977-479a-9f6f-14b15df05665" />
 
