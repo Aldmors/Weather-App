@@ -102,7 +102,7 @@ docker-compose down
 
 ### Troubleshooting
 
-- Ensure ports 80 and 5050 are not already in use
+- Ensure ports 3000 and 5050 are not already in use
 
 ## Main App
 <img width="842" height="499" alt="image" src="https://github.com/user-attachments/assets/2435824b-eeae-4cba-aab3-b8cd71487723" />
