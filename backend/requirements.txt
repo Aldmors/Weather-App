@@ -12,3 +12,4 @@ django-rest-registration
 django-cors-headers
 django-redis
 django-admincharts
+whitenoise

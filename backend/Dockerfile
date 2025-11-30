@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.14
+FROM python:3.12
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 ## Collect static files
-#RUN python manage.py collectstatic --no-input
+RUN python manage.py collectstatic --no-input

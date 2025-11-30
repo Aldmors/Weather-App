@@ -35,7 +35,7 @@ services:
     ports:
       - "5050:5050"
     environment:
-      - DEBUG=1
+      - DEBUG=0
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}

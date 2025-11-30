@@ -16,4 +16,4 @@ RUN npm run build
 
 EXPOSE 80
 
-CMD ["next", "start", "-p", "80"]
+CMD ["npm", "start", "-p", "80"]
