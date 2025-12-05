@@ -11,3 +11,4 @@ DEBUG=0
 # Get your API keys from: https://openweathermap.org/api
 WEATHER_KEY_ONE_CALL=your_openweathermap_onecall_api_key_here
 
+
