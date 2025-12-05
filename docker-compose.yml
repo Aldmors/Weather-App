@@ -10,8 +10,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - backend-db
+      - zabbix-net
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - ./postgres-init/init-zabbix-db.sql:/docker-entrypoint-initdb.d/init-zabbix-db.sql
 
   redis:
     image: redis:latest
@@ -20,6 +22,7 @@ services:
       - "6379:6379"
     networks:
       - backend-db
+      - zabbix-net
     volumes:
       - redis_data:/data
 
@@ -75,28 +78,17 @@ services:
     networks:
       - frontend-backend
 
-  zabbix-db:
-    image: postgres:17
-    container_name: zabbix-db
-    environment:
-      - POSTGRES_DB=zabbix
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    networks:
-      - zabbix-net
-    volumes:
-      - zabbix_db_data:/var/lib/postgresql/data/
 
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:latest
     container_name: zabbix-server
     environment:
-      - DB_SERVER_HOST=zabbix-db
+      - DB_SERVER_HOST=db
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=zabbix
     depends_on:
-      - zabbix-db
+      - db
     networks:
       - zabbix-net
     ports:
@@ -110,13 +102,14 @@ services:
     ports:
       - "8888:8080"
     environment:
-      - DB_SERVER_HOST=zabbix-db
+      - DB_SERVER_HOST=db
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=zabbix
       - ZBX_SERVER_HOST=zabbix-server
     depends_on:
       - zabbix-server
+      - db
     networks:
       - zabbix-net
 
@@ -150,4 +143,3 @@ volumes:
   redis_data:
   static_volume:
   zabbix_server_data:
-  zabbix_db_data:
