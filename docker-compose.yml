@@ -75,13 +75,59 @@ services:
     networks:
       - frontend-backend
 
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:latest
+    container_name: zabbix-server
+    environment:
+      - DB_SERVER_HOST=db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=zabbix
+    depends_on:
+      - db
+    networks:
+      - backend-db
+      - zabbix-net
+    volumes:
+      - zabbix_server_data:/var/lib/zabbix
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    container_name: zabbix-web
+    ports:
+      - "8888:8080"
+    environment:
+      - DB_SERVER_HOST=db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=zabbix
+      - ZBX_SERVER_HOST=zabbix-server
+    depends_on:
+      - zabbix-server
+    networks:
+      - backend-db
+      - zabbix-net
+
+  zabbix-agent:
+    image: zabbix/zabbix-agent:latest
+    container_name: zabbix-agent
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server
+    depends_on:
+      - zabbix-server
+    networks:
+      - zabbix-net
+
 networks:
   backend-db:
     driver: bridge
   frontend-backend:
+    driver: bridge
+  zabbix-net:
     driver: bridge
 
 volumes:
   postgres_data:
   redis_data:
   static_volume:
+  zabbix_server_data:
